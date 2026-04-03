@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-table";
 import { getColumnsWithActions } from "../clientSchema/crud/columns";
 import { useMemo } from "react";
+import { toast } from "react-toastify";
 
 export function createCrudHooks<TForm extends { id?: string }>({
   endpoint,
@@ -23,6 +24,7 @@ export function createCrudHooks<TForm extends { id?: string }>({
       queryKey: [queryKey],
       queryFn: async () => {
         const response = await axios.get(baseUrl);
+        // console.log("hello", response)
         return response.data;
       },
     });
@@ -31,7 +33,10 @@ export function createCrudHooks<TForm extends { id?: string }>({
     const queryClient = useQueryClient();
     return useMutation<any, Error, { body: TForm }>({
       mutationFn: async ({ body }: { body: TForm }) => {
+
         const response = await axios.post(baseUrl, body);
+        console.log('aaaa',response.data)
+        toast.error(response.data?.message || "some error occurred")
         return response.data;
       },
       onSuccess: (response) => {
@@ -58,14 +63,14 @@ export function createCrudHooks<TForm extends { id?: string }>({
         console.log(error);
       },
     });
-  };
+  }; 
 
   const useDelete = () => {
     const queryClient = useQueryClient();
     return useMutation<any, Error, { id: string }>({
       mutationFn: async ({ id }: { id: string }) => {
         const response = await axios.delete(`${baseUrl}/${id}`);
-        return response.data;
+        return response.data; 
       },
       onSuccess: (response) => {
         console.log(response);

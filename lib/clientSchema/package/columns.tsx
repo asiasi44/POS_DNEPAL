@@ -1,9 +1,9 @@
-import { PackageFormType } from "./schema";
 import { ColumnDef } from "@tanstack/react-table";
 import { FaToggleOn } from "react-icons/fa6";
 import { FaToggleOff } from "react-icons/fa6";
+import { PackageFormType } from "./schema";
 
-export const getPackageColumns = (): ColumnDef<PackageFormType>[] => [
+export const getPackagesColumns = (): ColumnDef<PackageFormType>[] => [
   {
     accessorKey: "name",
     header: "Package Name",

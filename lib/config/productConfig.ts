@@ -1,6 +1,6 @@
 import { CrudConfig } from "../clientSchema/crud/schema";
-import ProductFormView from "@/components/product/ProductFormView";
-import { useCreateProduct, useDeleteProduct, useGetAllProducts, useProductTable, useUpdateProduct } from "../hooks/useProduct";
+import ProductFormView from "@/components/products/ProductFormView";
+import { useCreateProduct, useDeleteProduct, useGetAllProducts, useProductsTable, useUpdateProduct } from "../hooks/useProduct";
 import {
 	productFormSchema,
 	ProductFormType,
@@ -22,7 +22,7 @@ export const productConfig: CrudConfig<ProductFormType, ProductFormType> =
     FormView: ProductFormView,
     formId: "form-rhf-product",
     hooks: {
-      useTable: useProductTable,
+      useTable: useProductsTable,
       useUpdate: useUpdateProduct,
       useGetAll: useGetAllProducts,
       useCreate: useCreateProduct,

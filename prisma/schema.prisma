@@ -197,12 +197,14 @@ model Product {
   unit         String
   batchId      String?
   minStock     Int
-  openingStock Int
+  openingStock Int 
   expiryDate   DateTime?
   status       Boolean   @default(true)
 
   categoryId String?
   brandId    String?
+  
+  createdBy UserRole
 
   company  Company   @relation(fields: [companyId], references: [id])
   category Category? @relation(fields: [categoryId], references: [id])

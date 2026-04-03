@@ -1,6 +1,6 @@
-import { getPackageColumns } from "../clientSchema/package/columns";
-import { PackageFormType } from "../clientSchema/package/schema";
 import { createCrudHooks, createCrudTableHook } from "./useCrudHooks";
+import { PackageFormType } from "../clientSchema/package/schema";
+import { getPackagesColumns } from "../clientSchema/package/columns";
 
 const packageCrud = createCrudHooks<PackageFormType>({
   endpoint: "package",
@@ -14,8 +14,8 @@ export const {
   useDelete: useDeletePackage,
 } = packageCrud;
 
-export const usePackageTable = createCrudTableHook<PackageFormType>({
+export const usePackagesTable = createCrudTableHook<PackageFormType>({
   useGetAll: useGetAllPackages,
-  getColumns: getPackageColumns,
+  getColumns: getPackagesColumns,
   dataKey: "packages",
 });

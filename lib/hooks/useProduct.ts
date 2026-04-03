@@ -1,6 +1,6 @@
-import { createCrudHooks, createCrudTableHook } from "./useCrudHooks";
-import { getProductColumns } from "../clientSchema/product/columns";
 import { ProductFormType } from "../clientSchema/product/schema";
+import { getProductsColumns } from "../clientSchema/product/columns";
+import { createCrudHooks, createCrudTableHook } from "./useCrudHooks";
 
 const productCrud = createCrudHooks<ProductFormType>({
   endpoint: "product",
@@ -14,8 +14,8 @@ export const {
   useDelete: useDeleteProduct,
 } = productCrud;
 
-export const useProductTable = createCrudTableHook<ProductFormType>({
+export const useProductsTable = createCrudTableHook<ProductFormType>({
   useGetAll: useGetAllProducts,
-  getColumns: getProductColumns,
+  getColumns: getProductsColumns,
   dataKey: "products",
 });

@@ -8,7 +8,7 @@ import {
   useCreatePackage,
   useDeletePackage,
   useGetAllPackages,
-  usePackageTable,
+  usePackagesTable,
   useUpdatePackage,
 } from "../hooks/usePackage";
 
@@ -35,7 +35,7 @@ export const packageConfig: CrudConfig<PackageFormType, PackageFormType> = {
   FormView: PackageFormView,
   formId: "form-rhf-package",
   hooks: {
-    useTable: usePackageTable,
+    useTable: usePackagesTable,
     useUpdate: useUpdatePackage,
     useDelete: useDeletePackage,
     useGetAll: useGetAllPackages,

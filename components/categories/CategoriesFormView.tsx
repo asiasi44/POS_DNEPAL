@@ -10,7 +10,7 @@ import { Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 
 const CategoriesFormView = ({
-  form,
+  form, 
 }: {
   form: UseFormReturn<CategoryType>;
 }) => {
