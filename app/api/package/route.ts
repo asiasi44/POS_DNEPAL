@@ -7,9 +7,11 @@ type Params = { params: Promise<{ id: string }> };
 
 export const POST = withErrorHandler<Params>(async function (
 	request: NextRequest,
+	{ params }: Params,
 ) {
 	const body = await request.json();
-	await verifyAuth();
+	const user = await verifyAuth();
+	const createdUser = user.role;
 
 	const createdPackage = await prisma.package.create({
 		data: {
@@ -18,18 +20,25 @@ export const POST = withErrorHandler<Params>(async function (
 			interval: body.interval,
 			maxProducts: body.maxProducts,
 			maxStaff: body.maxStaff,
+			maxWarehouses: body.maxWarehouses,
+			maxStockAdjust: body.maxStockAdjust,
 			enableReports: body.enableReports,
 			enableAdvanced: body.enableAdvanced,
+			// optional: if you want to track who created it
+			// createdBy: createdUser,  // add field in Prisma if needed
 		},
 	});
 
 	return NextResponse.json({
 		success: true,
-		updatedPackages: createdPackage,
+		packages: createdPackage,
 	});
 });
 
-export const GET = withErrorHandler<Params>(async function () {
+export const GET = withErrorHandler<Params>(async function (
+	request: NextRequest,
+	{ params }: Params,
+) {
 	const allPackages = await prisma.package.findMany();
 
 	return NextResponse.json({

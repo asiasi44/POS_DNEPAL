@@ -197,7 +197,7 @@ model Product {
   unit         String
   batchId      String?
   minStock     Int
-  openingStock Int
+  openingStock Int 
   expiryDate   DateTime?
   status       Boolean   @default(true)
 

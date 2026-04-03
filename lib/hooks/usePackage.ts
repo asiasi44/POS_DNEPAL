@@ -1,6 +1,6 @@
+import { createCrudHooks, createCrudTableHook } from "./useCrudHooks";
 import { PackageType } from "../clientSchema/package/schema";
 import { getPackagesColumns } from "../clientSchema/package/columns";
-import { createCrudHooks, createCrudTableHook } from "./useCrudHooks";
 
 const packageCrud = createCrudHooks<PackageType>({
   endpoint: "package",

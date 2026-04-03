@@ -1,19 +1,17 @@
 import * as z from "zod";
 
-export const productFormSchema = z.object({
+export const productSchema = z.object({
   id: z.string().optional(),
   name: z.string(),
   sku: z.string(),
-  // price: z.number(),
-  costPrice: z.number(),
-  sellingPrice: z.number().optional(),
+  sellingPrice: z.number(),
   unit: z.string(),
-  minStock: z.number().int(),
-  openingStock: z.number().int(),
-  expiryDate: z.date().optional(),
-  status: z.boolean().default(true),
+  openingStock: z.number(),
   categoryId: z.string().optional(),
   brandId: z.string().optional(),
+  categoryName: z.string().optional(),
+  brandName: z.string().optional(),
+  createdBy: z.string().optional(),
 });
 
-export type ProductFormType = z.infer<typeof productFormSchema>;
+export type ProductType = z.infer<typeof productSchema>;
