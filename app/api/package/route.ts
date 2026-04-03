@@ -39,7 +39,6 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   try {
     const packages = await prisma.package.findMany();
-
     return NextResponse.json({
       message: "Packages fetched",
       packages: packages,

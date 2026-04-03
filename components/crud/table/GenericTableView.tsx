@@ -16,6 +16,7 @@ export default function GenericTableView<T extends FieldValues>({
   table: TableType<T>;
 }) {
   const rows = table.getRowModel().rows || [];
+  console.log("hllow 2", rows)
   return (
     <div className="overflow-hidden rounded-md border">
       <Table>
@@ -44,11 +45,13 @@ export default function GenericTableView<T extends FieldValues>({
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
               >
-                {row.getVisibleCells().map((cell) => (
+                {row.getVisibleCells().map((cell) => {
+                  console.log(cell.getContext())
+                  return (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
-                ))}
+                )})}
               </TableRow>
             ))
           ) : (

@@ -29,22 +29,29 @@ export async function PATCH(request: NextRequest, { params }) {
   try {
     const { id } = await params;
     const body = await request.json();
-    // const patchedPackage = await prisma.package.update({
-    //   where: {
-    //     id: parseInt(id),
-    //   },
-    //   data: {
-    //     name: body.name,
-    //     interval: body.type,
-    //     maxCustomer: parseInt(body.maxCustomer),
-    //     maxProduct: parseInt(body.maxProduct),
-    //     price: parseFloat(body.price),
-    //   },
-    // });
+
+    const patchedPackage = await prisma.package.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: body.name,
+        price: parseFloat(body.price),
+        interval: body.interval,
+        maxProducts: parseInt(body.maxProducts),
+        maxStaff: parseInt(body.maxStaff),
+        maxWarehouses: parseInt(body.maxWarehouses),
+        maxStockAdjust: parseInt(body.maxStockAdjust),
+        enableAdvanced: body.enableReports,
+        enableReports: body.enableAdvanced,
+      },
+    });
+    console.log(patchedPackage)
     return NextResponse.json({
       message: "Package Edited Successfully",
     });
   } catch (error) {
+    console.log(error)
     return NextResponse.json(
       {
         message: "Error editing Package",
