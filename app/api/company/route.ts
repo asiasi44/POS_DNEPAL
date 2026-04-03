@@ -52,18 +52,22 @@ export async function POST(request: NextRequest) {
         },
       },
     });
+    return NextResponse.json({
+      message: "Company created successfully",
+      data: newCompany,
+    });
 
     return new NextResponse(
       JSON.stringify({
         message: "Company created successfully",
         data: newCompany,
-      })
+      }),
     );
   } catch (error) {
     console.log(error);
     return new NextResponse(
       JSON.stringify({ message: "Error processing package", error: error }),
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -107,14 +111,17 @@ export async function GET() {
       currentSubscription: c.subscriptions[0] ?? null,
       subscriptions: undefined,
     }));
-
+    return NextResponse.json({
+      message: "Company fetched",
+      companies,
+    });
     return new NextResponse(
-      JSON.stringify({ message: "Company fetched", companies })
+      JSON.stringify({ message: "Company fetched", companies }),
     );
   } catch (error) {
     return new NextResponse(
       JSON.stringify({ message: "Error fetching packages", error: error }),
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

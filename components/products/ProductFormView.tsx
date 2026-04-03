@@ -1,5 +1,5 @@
 import { UseFormReturn, Controller } from "react-hook-form";
-import { ProductType } from "@/lib/clientSchema/product/schema";
+import { ProductFormType } from "@/lib/clientSchema/product/schema";
 import { Input } from "@/components/ui/input";
 import {
 	Field,
@@ -8,7 +8,7 @@ import {
 	FieldGroup,
 } from "@/components/ui/field";
 
-const ProductFormView = ({ form }: { form: UseFormReturn<ProductType> }) => {
+const ProductFormView = ({ form }: { form: UseFormReturn<ProductFormType> }) => {
 	return (
 		<FieldGroup>
 			<Controller

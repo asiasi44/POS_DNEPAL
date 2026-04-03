@@ -5,6 +5,7 @@ import { verifyAuth } from "@/lib/auth";
 
 type Params = { params: Promise<{ id: string }> };
 
+<<<<<<< HEAD
 export const POST = withErrorHandler<Params>(async function (
 	request: NextRequest,
 	{ params }: Params,
@@ -46,3 +47,50 @@ export const GET = withErrorHandler<Params>(async function (
 		packages: allPackages,
 	});
 });
+=======
+    const newPackage = await prisma.package.create({
+      data: {
+        name: reqBody.name,
+        price: parseFloat(reqBody.price),
+        interval: reqBody.interval,
+        maxProducts: parseInt(reqBody.maxProducts),
+        maxStaff: parseInt(reqBody.maxStaff),
+        maxWarehouses: parseInt(reqBody.maxWarehouses),
+        maxStockAdjust: parseInt(reqBody.maxStockAdjust),
+        enableReports: reqBody.enableReports,
+        enableAdvanced: reqBody.enableAdvanced,
+      },
+    });
+
+    return NextResponse.json(
+      {
+        message: "Package created successfully",
+        data: reqBody,
+      },
+      { status: 201 },
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Error creating package", error: error },
+      { status: 500 },
+    );
+  }
+}
+
+export async function GET() {
+  try {
+    const packages = await prisma.package.findMany();
+    return NextResponse.json({
+      message: "Packages fetched",
+      packages: packages,
+    });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Error fetching packages", error: error },
+      { status: 500 },
+    );
+  }
+}
+>>>>>>> main

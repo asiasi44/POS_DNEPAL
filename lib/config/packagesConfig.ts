@@ -1,5 +1,5 @@
 import PackagesFormView from "@/components/packages/PackageFormView";
-import { packageSchema, PackageType } from "../clientSchema/package/schema";
+import {PackageFormType, packageFormSchema} from "../clientSchema/package/schema";
 import { CrudConfig } from "../clientSchema/crud/schema";
 import {
 	usePackagesTable,
@@ -9,14 +9,14 @@ import {
 	useUpdatePackage,
 } from "../hooks/usePackage";
 
-export const packagesConfig: CrudConfig<PackageType, PackageType> = {
+export const packagesConfig: CrudConfig<PackageFormType, PackageFormType> = {
 	entityName: "Package",
 	entityNamePlural: "Packages",
 	description: "Manage subscription packages in the system",
 	schema: {
-		create: packageSchema,
-		update: packageSchema,
-		row: packageSchema,
+		create: packageFormSchema,
+		update: packageFormSchema,
+		row: packageFormSchema,
 	},
 	defaultValues: {
 		name: "",
@@ -24,8 +24,8 @@ export const packagesConfig: CrudConfig<PackageType, PackageType> = {
 		interval: "MONTHLY",
 		maxProducts: 0,
 		maxStaff: 0,
-		maxWarehouses: null,
-		maxStockAdjust: null,
+		maxWarehouses: 0,
+		maxStockAdjust: 0,
 		enableReports: true,
 		enableAdvanced: false,
 	},

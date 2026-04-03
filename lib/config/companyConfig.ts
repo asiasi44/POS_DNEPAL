@@ -4,7 +4,13 @@ import {
   CompanyTypeForm,
 } from "../clientSchema/company/schema";
 import CompanyFormView from "@/components/company/CompanyFormView";
-import { useCompanyTable, useUpdateCompany } from "../hooks/useCompany";
+import {
+  useCompanyTable,
+  useCreateCompany,
+  useDeleteCompany,
+  useGetAllCompanies,
+  useUpdateCompany,
+} from "../hooks/useCompany";
 
 export const companyConfig: CrudConfig<CompanyTypeForm, CompanyTypeForm> = {
   entityName: "Company",
@@ -23,5 +29,8 @@ export const companyConfig: CrudConfig<CompanyTypeForm, CompanyTypeForm> = {
   hooks: {
     useTable: useCompanyTable,
     useUpdate: useUpdateCompany,
+    useGetAll: useGetAllCompanies,
+    useCreate: useCreateCompany,
+    useDelete: useDeleteCompany,
   },
 };

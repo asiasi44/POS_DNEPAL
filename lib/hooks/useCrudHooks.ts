@@ -109,7 +109,11 @@ export function createCrudTableHook<TRow>({
     const { data: response, isLoading, error } = useGetAll();
 
     // Extract data using dataKey if provided, otherwise use response directly
-    const data = dataKey && response ? response[dataKey] : response || [];
+    const data = Array.isArray(dataKey ? response?.[dataKey] : response)
+      ? dataKey
+        ? response?.[dataKey]
+        : response
+      : [];
 
     const columns = useMemo(
       () =>
@@ -117,7 +121,7 @@ export function createCrudTableHook<TRow>({
           onEdit,
           onDelete,
         }),
-      [onEdit, onDelete]
+      [onEdit, onDelete],
     );
 
     return useReactTable({

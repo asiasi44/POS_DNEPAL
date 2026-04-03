@@ -13,7 +13,7 @@ export async function GET(request) {
           select: {
             id: true,
             name: true,
-            type: true,
+            interval: true,
           },
         },
         company: {
@@ -32,7 +32,7 @@ export async function GET(request) {
     console.log(error);
     return NextResponse.json(
       { message: "Error fetching subscriptions", success: false },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

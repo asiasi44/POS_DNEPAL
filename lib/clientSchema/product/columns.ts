@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { ProductType } from "./schema";
+import { ProductFormType } from "./schema";
 
-export const getProductsColumns = (): ColumnDef<ProductType>[] => [
+export const getProductsColumns = (): ColumnDef<ProductFormType>[] => [
   {
     accessorKey: "sku",
     header: "SKU",

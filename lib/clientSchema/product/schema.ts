@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const productSchema = z.object({
+export const productFormSchema = z.object({
   id: z.string().optional(),
   name: z.string(),
   sku: z.string(),
@@ -14,4 +14,4 @@ export const productSchema = z.object({
   createdBy: z.string().optional(),
 });
 
-export type ProductType = z.infer<typeof productSchema>;
+export type ProductFormType = z.infer<typeof productFormSchema>;
