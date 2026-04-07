@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useGetSubscription } from "@/lib/hooks/useSubscription";
+import { Button } from "@/components/ui/button";
 
 const getTimeLeft = (endDate, now) => {
   const diff = new Date(endDate) - now;
@@ -56,6 +57,7 @@ const SubscriptionPage = () => {
   }
 
   const subscriptions = subscriptionData?.subscriptions || [];
+  console.log(subscriptions);
 
   console.log(subscriptions);
   return (
@@ -65,6 +67,7 @@ const SubscriptionPage = () => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Action</TableHead>
               <TableHead>Company Name</TableHead>
               <TableHead>Package Name</TableHead>
               <TableHead>Package Type</TableHead>
@@ -77,9 +80,13 @@ const SubscriptionPage = () => {
             {subscriptions.map((subscription) => {
               return (
                 <TableRow key={subscription.company.name}>
+                  <TableCell className="flex gap-4">
+                    <Button variant={"destructive"}>Delete</Button>
+                    <Button variant={"secondary"}>Edit</Button>
+                  </TableCell>
                   <TableCell>{subscription.company?.name}</TableCell>
                   <TableCell>{subscription.package?.name}</TableCell>
-                  <TableCell>{subscription.package?.type}</TableCell>
+                  <TableCell>{subscription.package?.interval}</TableCell>
                   <TableCell>{formatDate(subscription.startDate)}</TableCell>
                   <TableCell>{formatDate(subscription.endDate)}</TableCell>
                   <TableCell className="font-mono">

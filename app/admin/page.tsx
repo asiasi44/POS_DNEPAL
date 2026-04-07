@@ -10,7 +10,7 @@ const AdminPage = () => {
   if (isError) {
     <>is error...</>;
   }
-  return <div>{currentUser?.name}</div>;
+  return <div>{currentUser?.name} --{">"} {currentUser?.role}</div>;
 };
 
 export default AdminPage;

@@ -1,58 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { withErrorHandler } from "@/lib/errorHandler";
 import prisma from "@/lib/prisma";
 
-<<<<<<< HEAD
-type Params = { params: Promise<{ id: string }> };
-
-export const PATCH = withErrorHandler<Params>(async function (
-	request: NextRequest,
-	{ params }: Params,
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
 ) {
-	const body = await request.json();
-	const { id } = await params;
-
-	const updatedPackage = await prisma.package.update({
-		where: {
-			id,
-		},
-		data: {
-			name: body.name,
-			price: body.price,
-			interval: body.interval,
-			maxProducts: body.maxProducts,
-			maxStaff: body.maxStaff,
-			maxWarehouses: body.maxWarehouses,
-			maxStockAdjust: body.maxStockAdjust,
-			enableReports: body.enableReports,
-			enableAdvanced: body.enableAdvanced,
-		},
-	});
-
-	return NextResponse.json({
-		success: true,
-		message: `PATCH package ${id}`,
-		updatedPackage,
-	});
-});
-
-export const DELETE = withErrorHandler<Params>(async function (
-	request: NextRequest,
-	{ params }: Params,
-) {
-	const { id } = await params;
-
-	const deletedPackage = await prisma.package.delete({
-		where: { id },
-	});
-
-	return NextResponse.json({
-		success: true,
-		deletedPackage,
-	});
-});
-=======
-export async function DELETE(request: NextRequest, { params }) {
   try {
     const { id } = await params;
     // const deletedPackage = await prisma.package.delete({
@@ -70,12 +22,15 @@ export async function DELETE(request: NextRequest, { params }) {
         message: "Error while Deleting Package",
         error: error,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
-export async function PATCH(request: NextRequest, { params }) {
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const { id } = await params;
     const body = await request.json();
@@ -96,19 +51,18 @@ export async function PATCH(request: NextRequest, { params }) {
         enableReports: body.enableAdvanced,
       },
     });
-    console.log(patchedPackage)
+    console.log(patchedPackage);
     return NextResponse.json({
       message: "Package Edited Successfully",
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return NextResponse.json(
       {
         message: "Error editing Package",
         error: error,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
->>>>>>> main
