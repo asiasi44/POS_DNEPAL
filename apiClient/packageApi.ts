@@ -11,7 +11,7 @@ export const addPackage = async (body: {
   type: String;
   maxCustomer: Number;
   maxProducts: Number;
-  price: Number;
+  price: Number; 
 }) => {
   const response = await axios.post("/api/package", body);
   return response;

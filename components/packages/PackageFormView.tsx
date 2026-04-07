@@ -1,4 +1,4 @@
-import { PackageType } from "@/lib/clientSchema/package/schema";
+import { PackageFormType } from "@/lib/clientSchema/package/schema";
 import { UseFormReturn } from "react-hook-form";
 import {
 	Field,
@@ -9,7 +9,7 @@ import {
 import { Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 
-const PackagesFormView = ({ form }: { form: UseFormReturn<PackageType> }) => {
+const PackagesFormView = ({ form }: { form: UseFormReturn<PackageFormType> }) => {
 	return (
 		<FieldGroup>
 			<Controller

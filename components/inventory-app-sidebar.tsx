@@ -23,6 +23,16 @@ const inventoryItems = [
     title: "Category",
     url: "/admin/category",
     icon: MdCategory
+  },
+  {
+    title: "Stocks",
+    url: "/admin/stocks",
+    icon: MdCategory
+  },
+  {
+    title: "Brands",
+    url: "/admin/brand",
+    icon: MdCategory
   }
 ];
 

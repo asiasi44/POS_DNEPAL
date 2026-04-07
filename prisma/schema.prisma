@@ -82,7 +82,7 @@ model User {
   stockLogs StockLog[]
 }
 
-model LoginLog {
+model LoginLog { 
   id        String   @id @default(uuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id])
@@ -186,7 +186,7 @@ model Subscription {
  * ===========================
  */
 
-model Product {
+model Product { 
   id        String @id @default(uuid())
   companyId String
 
@@ -223,7 +223,12 @@ model StockLog {
 
   quantity Int
   action   StockActionType
-  reason   String?
+
+  balance Int?
+  reason String?
+  source String?
+
+  warehouse String?
 
   product Product @relation(fields: [productId], references: [id])
   user    User    @relation(fields: [userId], references: [id])
@@ -266,12 +271,17 @@ model CompanyCategory {
 }
 
 model Brand {
-  id        String @id @default(uuid())
+  id        String   @id @default(uuid())
   companyId String
-  name      String
+
+  name   String
+  status Boolean  @default(true)   // 
 
   company  Company   @relation(fields: [companyId], references: [id])
   products Product[]
+
+  createdAt DateTime @default(now())  //
+  updatedAt DateTime @updatedAt       //
 }
 
 /**
