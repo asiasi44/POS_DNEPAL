@@ -43,24 +43,4 @@ export const getProductsColumns = (): ColumnDef<ProductFormType>[] => [
     header: "Created By",
     cell: ({ row }) => row.getValue("createdBy"),
   },
-  {
-  id: "actions",
-  header: "Actions",
-  cell: ({ row, table }) => {
-    const data = row.original;
-
-    return (
-      <div className="flex gap-3">
-        <button onClick={() => table.options.meta?.onEdit(data)}>
-          <FaEdit className="text-blue-500 cursor-pointer" />
-        </button>
-
-        <button onClick={() => table.options.meta?.onDelete(data)}>
-          <FaTrash className="text-red-500 cursor-pointer" />
-        </button>
-      </div>
-    );
-  },
-}
 ];
-
