@@ -12,5 +12,5 @@ export const logout = async () => {
 
 export const getCurrentUser = async () => {
   const response = await axios.get("/api/protected");
-  return response.data.userInfo;
+  return response.data.userInfo ?? null;
 };

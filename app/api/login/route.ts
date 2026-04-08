@@ -8,7 +8,6 @@ import { cookies } from "next/headers";
 export async function POST(request) {
   try {
     const body = await request.json();
-    console.log(body);
     const findUser = await prisma.user.findFirst({
       where: {
         email: body.email,

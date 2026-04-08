@@ -17,6 +17,7 @@ export function useLogin() {
     onError: (error) => {
       const msg = error?.response?.data?.message;
       toast.error(msg);
+      throw error;
     },
   });
 }
