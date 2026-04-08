@@ -7,11 +7,11 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    // const deletedPackage = await prisma.package.delete({
-    //   where: {
-    //     id: parseInt(id),
-    //   },
-    // });
+    const deletedPackage = await prisma.package.delete({
+      where: {
+        id: id,
+      },
+    });
     return NextResponse.json({
       message: "Successfully Deleted Package",
       success: true,
@@ -47,8 +47,8 @@ export async function PATCH(
         maxStaff: parseInt(body.maxStaff),
         maxWarehouses: parseInt(body.maxWarehouses),
         maxStockAdjust: parseInt(body.maxStockAdjust),
-        enableAdvanced: body.enableReports,
-        enableReports: body.enableAdvanced,
+        enableAdvanced: body.enableAdvanced,
+        enableReports: body.enableReports,
       },
     });
     console.log(patchedPackage);

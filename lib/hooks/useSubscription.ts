@@ -1,9 +1,24 @@
-import { getSubscriptions } from "@/apiClient/subscriptionApi";
-import { useQuery } from "@tanstack/react-query";
+import { getSubscriptionColumns } from "../clientSchema/subscription/columns";
+import {
+  SubscriptionFormType,
+  SubscriptionRowType,
+} from "../clientSchema/subscription/schema";
+import { createCrudHooks, createCrudTableHook } from "./useCrudHooks";
 
-export function useGetSubscription() {
-  return useQuery({
-    queryKey: ["subscriptions"],
-    queryFn: getSubscriptions,
-  });
-}
+const subscriptionCrud = createCrudHooks<SubscriptionFormType>({
+  endpoint: "subscription",
+  queryKey: "subscriptions",
+});
+
+export const {
+  useGetAll: useGetAllSubscriptions,
+  useCreate: useCreateSubscription,
+  useUpdate: useUpdateSubscription,
+  useDelete: useDeleteSubscription,
+} = subscriptionCrud;
+
+export const useSubscriptionsTable = createCrudTableHook<SubscriptionFormType>({
+  useGetAll: useGetAllSubscriptions,
+  getColumns: getSubscriptionColumns,
+  dataKey: "subscriptions",
+});

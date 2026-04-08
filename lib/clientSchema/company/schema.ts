@@ -1,6 +1,7 @@
 import * as z from "zod";
 
 export const companyWithAdminFormSchema = z.object({
+  id: z.string().optional(),
   name: z.string(),
   address: z.string(),
   phone: z.string(),
