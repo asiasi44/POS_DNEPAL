@@ -54,18 +54,18 @@ export type CrudConfig<TForm extends FieldValues, TRow> = {
     useDelete: () => UseMutationResult<any, Error, { id: string }, unknown>;
   };
 
-  filters?: {
-    search?: {
-      placeholder?: string;
-      fields: string[];
-    };
-    selects?: {
-      key: string;
-      placeholder: string;
-      options: {
-        label: string;
-        value: string;
-      }[];
-    }[];
-  };
+  // filters?: {
+  //   search?: {
+  //     placeholder?: string;
+  //     fields: string[];
+  //   };
+  //   selects?: {
+  //     key: string;
+  //     placeholder: string;
+  //     options: {
+  //       label: string;
+  //       value: string;
+  //     }[];
+  //   }[];
+  // };
 };
