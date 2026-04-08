@@ -1,4 +1,3 @@
-//@ts-nocheck
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -7,42 +6,25 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-
 import Link from "next/link";
 
-import { Package } from "lucide-react";
-import { MdCategory } from "react-icons/md";
+import { PersonStanding } from "lucide-react";
 
-const inventoryItems = [
+const superAdminItems = [
   {
-    title: "Product",
-    url: "/admin/product",
-    icon: Package,
+    title: "Staffs",
+    url: "/admin/staffs",
+    icon: PersonStanding,
   },
-  {
-    title: "Category",
-    url: "/admin/category",
-    icon: MdCategory
-  },
-  {
-    title: "Stocks",
-    url: "/admin/stocks",
-    icon: MdCategory
-  },
-  {
-    title: "Brands",
-    url: "/admin/brands",
-    icon: MdCategory
-  }
 ];
 
-const InventorySectionSidebar = () => {
+const CompanyAdminAppSidebar = () => {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Inventory</SidebarGroupLabel>
+      <SidebarGroupLabel>Company Admin</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
-          {inventoryItems.map((item) => {
+          {superAdminItems.map((item) => {
             return (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
@@ -63,4 +45,4 @@ const InventorySectionSidebar = () => {
   );
 };
 
-export default InventorySectionSidebar;
+export default CompanyAdminAppSidebar;

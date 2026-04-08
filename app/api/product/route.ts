@@ -4,8 +4,8 @@ import { verifyAuth } from "@/lib/auth";
 import { UserRole } from "@/app/generated/prisma/enums";
 
 export const GET = async () => {
-	try {
-		const user = await verifyAuth();
+  try {
+    const user = await verifyAuth();
 
 		const products = await prisma.product.findMany({
 			include: {

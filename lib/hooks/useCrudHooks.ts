@@ -23,28 +23,31 @@ export function createCrudHooks<TForm extends { id?: string }>({
     return useQuery({
       queryKey: [queryKey],
       queryFn: async () => {
-        const response = await axios.get(baseUrl);
-        // console.log("hello", response)
-        return response.data;
+        try {
+          const response = await axios.get(baseUrl);
+          return response.data;
+        } catch (error: any) {
+          toast.error(error.response?.data?.message || "Some error occured");
+          throw error;
+        }
       },
+      retry: 1,
     });
   };
   const useCreate = () => {
     const queryClient = useQueryClient();
     return useMutation<any, Error, { body: TForm }>({
       mutationFn: async ({ body }: { body: TForm }) => {
-
         const response = await axios.post(baseUrl, body);
-        console.log('aaaa',response.data)
-        toast.error(response.data?.message || "some error occurred")
         return response.data;
       },
       onSuccess: (response) => {
-        console.log(response);
+        toast.success(response.data?.message || "some error occurred");
+
         queryClient.invalidateQueries({ queryKey: [queryKey] });
       },
-      onError: (error) => {
-        console.log(error);
+      onError: (error: any) => {
+        toast.error(error.response?.data?.message || "Some error occured");
       },
     });
   };
@@ -63,14 +66,14 @@ export function createCrudHooks<TForm extends { id?: string }>({
         console.log(error);
       },
     });
-  }; 
+  };
 
   const useDelete = () => {
     const queryClient = useQueryClient();
     return useMutation<any, Error, { id: string }>({
       mutationFn: async ({ id }: { id: string }) => {
         const response = await axios.delete(`${baseUrl}/${id}`);
-        return response.data; 
+        return response.data;
       },
       onSuccess: (response) => {
         console.log(response);
@@ -109,11 +112,12 @@ export function createCrudTableHook<TRow>({
     const { data: response, isLoading, error } = useGetAll();
 
     // Extract data using dataKey if provided, otherwise use response directly
-    const data = Array.isArray(dataKey ? response?.[dataKey] : response)
-      ? dataKey
-        ? response?.[dataKey]
-        : response
-      : [];
+    const data = useMemo(() => {
+      if (!response) return [];
+
+      const targetData = dataKey ? response[dataKey] : response;
+      return Array.isArray(targetData) ? targetData : [];
+    }, [response, dataKey]);
 
     const columns = useMemo(
       () =>

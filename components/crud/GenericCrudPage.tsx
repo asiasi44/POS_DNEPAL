@@ -4,6 +4,7 @@ import { FieldValues } from "react-hook-form";
 import { GenericTableSection } from "@/components/crud/table/GenericTableSection";
 import { useState } from "react";
 
+// GenericCrudPage
 const GenericCrudPage = <TForm extends FieldValues, TRow>({
   config,
 }: {
@@ -11,7 +12,7 @@ const GenericCrudPage = <TForm extends FieldValues, TRow>({
 }) => {
   const [editData, setEditData] = useState<TForm | null>(null);
   return (
-    <div className="py-8 px-12 flex flex-col gap-12">
+    <div className="py-8 px-12 flex flex-col gap-12 w-full min-w-0 overflow-hidden">
       <div className="flex justify-between">
         <div className="text-3xl font-bold">{config.entityNamePlural}</div>
         <FormDialog

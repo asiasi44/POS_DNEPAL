@@ -195,6 +195,7 @@ model Product {
   costPrice    Float
   sellingPrice Float?
   unit         String
+  image        String
   batchId      String?
   minStock     Int
   openingStock Int 

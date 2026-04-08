@@ -8,31 +8,65 @@ import { cookies } from "next/headers";
 export async function POST(request) {
   try {
     const body = await request.json();
-    console.log(body)
     const findUser = await prisma.user.findFirst({
       where: {
         email: body.email,
-
       },
     });
     if (!findUser) {
       return NextResponse.json(
         { message: "Crendentials do not match!" },
-        { status: 401 }
+        { status: 401 },
       );
     }
     if (findUser) {
       const passwordCorrect = await bcrypt.compare(
         body.password,
-        findUser.password
+        findUser.password,
       );
       if (!passwordCorrect) {
         return NextResponse.json(
           { message: "Wrong password!" },
-          { status: 401 }
+          { status: 401 },
         );
       }
       if (passwordCorrect) {
+        if (findUser.role === "COMPANY_ADMIN") {
+          const findSubscription = await prisma.subscription.findFirst({
+            where: {
+              companyId: findUser.companyId,
+              isActive: true,
+            },
+          });
+          if (!findSubscription) {
+            return NextResponse.json(
+              { message: "No active subscription found" },
+              { status: 403 },
+            );
+          }
+          if (new Date() > findSubscription?.endDate) {
+            await prisma.subscription.update({
+              where: {
+                id: findSubscription.id,
+              },
+              data: {
+                isActive: false,
+              },
+            });
+            await prisma.company.update({
+              where: {
+                id: findUser.companyId,
+              },
+              data: {
+                isActive: true,
+              },
+            });
+            return NextResponse.json(
+              { message: "Subscription expired. Contact admin." },
+              { status: 403 },
+            );
+          }
+        }
         const token = jwt.sign(
           {
             name: findUser.name,
@@ -42,8 +76,8 @@ export async function POST(request) {
           },
           process.env.JWT_SECRET_KEY,
           {
-            expiresIn: 60 * 60,
-          }
+            expiresIn: 60 * 60 * 24,
+          },
         );
 
         (await cookies()).set({
@@ -65,14 +99,13 @@ export async function POST(request) {
   }
   return NextResponse.json(
     { message: "Wrong Credentials!!!" },
-    { status: 401 }
+    { status: 401 },
   );
 }
 
 export async function DELETE() {
   try {
     const deletedCookies = (await cookies()).delete({ name: "auth" });
-    console.log(deletedCookies);
     return NextResponse.json({ success: "Successfully Removed Cookie" });
   } catch (error) {
     return NextResponse.json({ status: "failed" }, { status: 500 });

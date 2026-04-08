@@ -18,11 +18,10 @@ const AdminLayout = ({ children }) => {
       <SidebarProvider>
         <AppSidebar />
         <SidebarTrigger />
-        <div className="w-full">
+        <div className="w-full min-w-0 overflow-hidden">
           <div className="flex w-full h-16 items-center justify-between px-12 border-b-1 mb-8 shadow-[0_4px_2px_-3px_rgba(0,0,0,0.1)]">
             <Link href={"/"} className="text-xl font-bold">
               POS <span className="">DNEPAL</span>
-
             </Link>
             <div className="flex gap-8 items-center">
               <div>Settings</div>
@@ -35,7 +34,7 @@ const AdminLayout = ({ children }) => {
               </button>
             </div>
           </div>
-          <div>{children}</div>
+          <div className="overflow-hidden min-w-0">{children}</div>
         </div>
       </SidebarProvider>
     </ProtectedRoutes>

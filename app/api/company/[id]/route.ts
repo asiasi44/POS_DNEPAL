@@ -8,7 +8,7 @@ export async function DELETE(request, { params }) {
     const { id } = await params;
     const deletedCompany = await prisma.company.delete({
       where: {
-        id: parseInt(id),
+        id: id,
       },
     });
 
@@ -21,7 +21,7 @@ export async function DELETE(request, { params }) {
     console.log(error);
     return NextResponse.json(
       { message: "Error deleting", success: false },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -63,7 +63,7 @@ export async function PATCH(request, { params }) {
     console.log(error);
     return NextResponse.json(
       { message: "Error Updating", success: false },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

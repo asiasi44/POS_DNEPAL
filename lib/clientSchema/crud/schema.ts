@@ -8,6 +8,13 @@ export type UpdateInput<T> = {
   data: Partial<T>;
 };
 
+export type FieldConfig<T> = {
+  name: keyof T;
+  label: string;
+  placeholder?: string;
+  type?: "text" | "number" | "email" | "password" | "date";
+};
+
 export type CrudConfig<TForm extends FieldValues, TRow> = {
   entityName: string;
   entityNamePlural: string;
@@ -16,7 +23,7 @@ export type CrudConfig<TForm extends FieldValues, TRow> = {
   schema: {
     create: ZodType<TForm, any, any>;
     update: ZodType<TForm, any, any>;
-    row: ZodType<TForm, any, any>;
+    row: ZodType<TRow, any, any>;
   };
 
   defaultValues: DefaultValues<TForm>;
@@ -47,18 +54,18 @@ export type CrudConfig<TForm extends FieldValues, TRow> = {
     useDelete: () => UseMutationResult<any, Error, { id: string }, unknown>;
   };
 
-  filters?: {
-    search?: {
-      placeholder?: string;
-      fields: string[];
-    };
-    selects?: {
-      key: string;
-      placeholder: string;
-      options: {
-        label: string;
-        value: string;
-      }[];
-    }[];
-  };
+  // filters?: {
+  //   search?: {
+  //     placeholder?: string;
+  //     fields: string[];
+  //   };
+  //   selects?: {
+  //     key: string;
+  //     placeholder: string;
+  //     options: {
+  //       label: string;
+  //       value: string;
+  //     }[];
+  //   }[];
+  // };
 };
