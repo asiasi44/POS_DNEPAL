@@ -1,3 +1,5 @@
+"use client";
+
 import { UseFormReturn, Controller } from "react-hook-form";
 import { ProductFormType } from "@/lib/clientSchema/product/schema";
 import { Input } from "@/components/ui/input";
@@ -8,9 +10,25 @@ import {
 	FieldGroup,
 } from "@/components/ui/field";
 
-const ProductFormView = ({ form }: { form: UseFormReturn<ProductFormType> }) => {
+import { useGetAllBrands } from "@/lib/hooks/useBrand";
+import { useGetAllCategories } from "@/lib/hooks/useCategory";
+
+const ProductFormView = ({
+	form,
+}: {
+	form: UseFormReturn<ProductFormType>;
+}) => {
+	// 🔥 Fetch data
+	const { data: brandData } = useGetAllBrands();
+	const { data: categoryData } = useGetAllCategories();
+
+	// ✅ Only active brands (optional)
+	const brands = brandData?.brands?.filter((b: any) => b.status) || [];
+	const categories = categoryData?.categories || [];
+
 	return (
 		<FieldGroup>
+			{/* PRODUCT NAME */}
 			<Controller
 				name="name"
 				control={form.control}
@@ -23,6 +41,7 @@ const ProductFormView = ({ form }: { form: UseFormReturn<ProductFormType> }) => 
 				)}
 			/>
 
+			{/* SKU */}
 			<Controller
 				name="sku"
 				control={form.control}
@@ -34,6 +53,45 @@ const ProductFormView = ({ form }: { form: UseFormReturn<ProductFormType> }) => 
 				)}
 			/>
 
+			{/* CATEGORY DROPDOWN */}
+			<Controller
+				name="categoryId"
+				control={form.control}
+				render={({ field }) => (
+					<Field>
+						<FieldLabel>Category</FieldLabel>
+						<select {...field} className="border p-2 rounded-md w-full">
+							<option value="">Select Category</option>
+							{categories.map((cat: any) => (
+								<option key={cat.id} value={cat.id}>
+									{cat.name}
+								</option>
+							))}
+						</select>
+					</Field>
+				)}
+			/>
+
+			{/* BRAND DROPDOWN */}
+			<Controller
+				name="brandId"
+				control={form.control}
+				render={({ field }) => (
+					<Field>
+						<FieldLabel>Brand</FieldLabel>
+						<select {...field} className="border p-2 rounded-md w-full">
+							<option value="">Select Brand</option>
+							{brands.map((brand: any) => (
+								<option key={brand.id} value={brand.id}>
+									{brand.name}
+								</option>
+							))}
+						</select>
+					</Field>
+				)}
+			/>
+
+			{/* PRICE */}
 			<Controller
 				name="sellingPrice"
 				control={form.control}
@@ -45,6 +103,7 @@ const ProductFormView = ({ form }: { form: UseFormReturn<ProductFormType> }) => 
 				)}
 			/>
 
+			{/* UNIT */}
 			<Controller
 				name="unit"
 				control={form.control}
@@ -56,6 +115,7 @@ const ProductFormView = ({ form }: { form: UseFormReturn<ProductFormType> }) => 
 				)}
 			/>
 
+			{/* QUANTITY */}
 			<Controller
 				name="openingStock"
 				control={form.control}
