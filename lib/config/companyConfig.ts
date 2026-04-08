@@ -1,7 +1,7 @@
 import { CrudConfig } from "../clientSchema/crud/schema";
 import {
-  companyFormSchema,
-  CompanyTypeForm,
+  companyWithAdminFormSchema,
+  CompanyWithAdminTypeForm,
 } from "../clientSchema/company/schema";
 import CompanyFormView from "@/components/company/CompanyFormView";
 import {
@@ -12,14 +12,14 @@ import {
   useUpdateCompany,
 } from "../hooks/useCompany";
 
-export const companyConfig: CrudConfig<CompanyTypeForm, CompanyTypeForm> = {
+export const companyConfig: CrudConfig<CompanyWithAdminTypeForm, CompanyWithAdminTypeForm> = {
   entityName: "Company",
   entityNamePlural: "Companies",
   description: "Add new Companies to the system",
   schema: {
-    create: companyFormSchema,
-    update: companyFormSchema,
-    row: companyFormSchema,
+    create: companyWithAdminFormSchema,
+    update: companyWithAdminFormSchema,
+    row: companyWithAdminFormSchema,
   },
   defaultValues: {
     name: "",

@@ -48,7 +48,7 @@ const FormDialog = <TForm extends FieldValues, TRow>({
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="h-2/3 overflow-scroll">
+      <DialogContent className="max-h-2/3 overflow-scroll">
         <DialogHeader>
           <DialogTitle>
             {isEditMode ? "Edit " : "Add "}

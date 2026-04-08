@@ -42,7 +42,7 @@ export async function POST(request) {
           },
           process.env.JWT_SECRET_KEY,
           {
-            expiresIn: 60 * 60,
+            expiresIn: 60 * 60 * 24,
           }
         );
 
@@ -72,7 +72,6 @@ export async function POST(request) {
 export async function DELETE() {
   try {
     const deletedCookies = (await cookies()).delete({ name: "auth" });
-    console.log(deletedCookies);
     return NextResponse.json({ success: "Successfully Removed Cookie" });
   } catch (error) {
     return NextResponse.json({ status: "failed" }, { status: 500 });

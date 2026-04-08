@@ -1,4 +1,4 @@
-import { CompanyTypeForm } from "@/lib/clientSchema/company/schema";
+import { CompanyWithAdminTypeForm } from "@/lib/clientSchema/company/schema";
 import { UseFormReturn } from "react-hook-form";
 import {
   Field,
@@ -6,91 +6,98 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
+
+type FieldConfig = {
+  name: keyof CompanyWithAdminTypeForm;
+  label: string;
+  placeholder?: string;
+  type?: "text" | "number" | "email" | "password";
+};
+
+const fields: FieldConfig[] = [
+  { name: "name", label: "Company Name" },
+  { name: "address", label: "Company Address" },
+  { name: "logoUrl", label: "Company Logo Url" },
+  { name: "phone", label: "Phone No." },
+  { name: "pan", label: "PAN" },
+  { name: "currency", label: "Currency", placeholder: "NPR" },
+  { name: "rounding", label: "Rounding", type: "number" },
+];
+
+const adminFields: FieldConfig[] = [
+  { name: "adminName", label: "Admin Name" },
+  { name: "adminEmail", label: "Admin Email", type: "email" },
+  { name: "adminPassword", label: "Admin Password", type: "password" },
+];
 
 const CompanyFormView = ({
   form,
 }: {
-  form: UseFormReturn<CompanyTypeForm>;
+  form: UseFormReturn<CompanyWithAdminTypeForm>;
 }) => {
   return (
-    <FieldGroup>
-      <Controller
-        name="name"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor="form-rhf-company-name">
-              Company Name
-            </FieldLabel>
-            <Input
-              {...field}
-              id="form-rhf-company-name"
-              aria-invalid={fieldState.invalid}
-              placeholder="Enter Company Name"
-              autoComplete="off"
-            />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
-      <Controller
-        name="address"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor="form-rhf-company-address">
-              Company Address
-            </FieldLabel>
-            <Input
-              {...field}
-              id="form-rhf-company-address"
-              aria-invalid={fieldState.invalid}
-              placeholder="Enter Company Address"
-              autoComplete="off"
-            />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
-      <Controller
-        name="address"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor="form-rhf-company-address">
-              Company Address
-            </FieldLabel>
-            <Input
-              {...field}
-              id="form-rhf-company-address"
-              aria-invalid={fieldState.invalid}
-              placeholder="Enter Company Address"
-              autoComplete="off"
-            />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
-      <Controller
-        name="phone"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor="form-rhf-company-phone">Phone No.</FieldLabel>
-            <Input
-              {...field}
-              id="form-rhf-company-phone"
-              aria-invalid={fieldState.invalid}
-              placeholder="Enter Phone Number"
-              autoComplete="off"
-            />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
-    </FieldGroup>
+    <div className="flex gap-4 h-full">
+      <FieldGroup>
+        <div className="text-blue-800 font-bold text-xl">Company</div>
+
+        {fields.map((item) => {
+          const error = form.formState.errors[item.name];
+
+          return (
+            <Field key={item.name} data-invalid={!!error}>
+              <FieldLabel htmlFor={`company-${item.name}`}>
+                {item.label}
+              </FieldLabel>
+
+              <Input
+                id={`company-${item.name}`}
+                type={item.type ?? "text"}
+                placeholder={item.placeholder}
+                autoComplete="off"
+                aria-invalid={!!error}
+                {...form.register(item.name, {
+                  valueAsNumber: item.type === "number",
+                })}
+              />
+
+              {error && <FieldError errors={[error]} />}
+            </Field>
+          );
+        })}
+      </FieldGroup>
+
+      <div className="w-1 h-full bg-black" />
+
+      <FieldGroup>
+        <div className="text-blue-800 font-bold text-xl">Admin</div>
+
+        {adminFields.map((item) => {
+          const error = form.formState.errors[item.name];
+
+          return (
+            <Field key={item.name} data-invalid={!!error}>
+              <FieldLabel htmlFor={`admin-${item.name}`}>
+                {item.label}
+              </FieldLabel>
+
+              <Input
+                id={`admin-${item.name}`}
+                type={item.type ?? "text"}
+                placeholder={item.placeholder}
+                autoComplete="off"
+                aria-invalid={!!error}
+                {...form.register(item.name, {
+                  valueAsNumber: item.type === "number",
+                })}
+              />
+
+              {error && <FieldError errors={[error]} />}
+            </Field>
+          );
+        })}
+      </FieldGroup>
+    </div>
   );
 };
 
