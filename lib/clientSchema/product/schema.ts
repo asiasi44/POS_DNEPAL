@@ -4,6 +4,7 @@ export const productFormSchema = z.object({
   id: z.string().optional(),
   name: z.string(),
   sku: z.string(),
+  costPrice: z.number(),
   sellingPrice: z.number(),
   unit: z.string(),
   openingStock: z.number(),

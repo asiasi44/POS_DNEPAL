@@ -1,8 +1,8 @@
 import { getCompanyColumns } from "../clientSchema/company/columns";
-import { CompanyTypeForm } from "../clientSchema/company/schema";
+import { CompanyWithAdminTypeForm } from "../clientSchema/company/schema";
 import { createCrudHooks, createCrudTableHook } from "./useCrudHooks";
 
-const companyCrud = createCrudHooks<CompanyTypeForm>({
+const companyCrud = createCrudHooks<CompanyWithAdminTypeForm>({
   endpoint: "company",
   queryKey: "companies",
 });
@@ -14,7 +14,7 @@ export const {
   useDelete: useDeleteCompany,
 } = companyCrud;
 
-export const useCompanyTable = createCrudTableHook<CompanyTypeForm>({
+export const useCompanyTable = createCrudTableHook<CompanyWithAdminTypeForm>({
   useGetAll: useGetAllCompanies,
   getColumns: getCompanyColumns,
   dataKey: "companies",

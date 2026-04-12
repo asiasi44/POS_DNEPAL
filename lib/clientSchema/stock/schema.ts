@@ -6,12 +6,11 @@ export const stockSchema = z.object({
 	quantity: z.number(),
 	action: z.enum(["STOCK_IN", "STOCK_OUT", "ADJUSTMENT"]),
 	source: z.string().optional(),
-	reason: z.string().optional(),
+	// reason: z.string().optional(),
 	warehouse: z.string().optional(),
-
 	productName: z.string().optional(),
-	userName: z.string().optional(),
-	balance: z.number().optional(),
+	// userName: z.string().optional(),
+	// balance: z.number().optional(),
 	createdAt: z.date().optional(),
 });
 

@@ -1,7 +1,7 @@
 import { UseFormReturn, Controller } from "react-hook-form";
 import { StockType } from "@/lib/clientSchema/stock/schema";
 import { Input } from "@/components/ui/input";
-import { Field, FieldLabel, FieldGroup } from "@/components/ui/field";
+import { Field, FieldLabel, FieldGroup, FieldError } from "@/components/ui/field";
 
 const StockFormView = ({ form }: { form: UseFormReturn<StockType> }) => {
 	return (
@@ -16,6 +16,18 @@ const StockFormView = ({ form }: { form: UseFormReturn<StockType> }) => {
 					</Field>
 				)}
 			/>
+
+			{/* <Controller
+				name="name"	
+				control={form.control}
+				render={({ field, fieldState }) => (
+					<Field>
+						<FieldLabel>Product Name</FieldLabel>
+						<Input {...field} placeholder="Enter name" />
+						{fieldState.error && <FieldError errors={[fieldState.error]} />}
+					</Field>
+				)}
+			/> */}
 
 			<Controller
 				name="quantity"

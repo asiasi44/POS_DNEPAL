@@ -1,12 +1,11 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { verifyAuth } from "@/lib/auth";
-import { UserRole } from "@/app/generated/prisma/enums";
 import { User } from "@/app/generated/prisma/client";
 
 export const GET = async () => {
   try {
-    const user = await verifyAuth();
+    await verifyAuth();
 
     const products = await prisma.product.findMany({
       include: {
@@ -28,14 +27,11 @@ export const GET = async () => {
       success: true,
       products: formatted,
     });
-  } catch (e) {
-    console.log(e, "GET PRODUCT ERROR");
+  } catch (e: any) {
+    console.error("GET PRODUCT ERROR:", e.message);
     return NextResponse.json(
-      {
-        success: false,
-        message: "Error fetching products",
-      },
-      { status: 500 },
+      { success: false, message: "Error fetching products" },
+      { status: 500 }
     );
   }
 };
@@ -44,26 +40,37 @@ export const POST = async (req: Request) => {
   try {
     const user: User = await verifyAuth();
     const body = await req.json();
-    console.log(body);
+
+    console.log("Incoming Product Body:", body);
+
+    if (!body.name || !body.sku) {
+      return NextResponse.json(
+        { success: false, message: "Name and SKU are required" },
+        { status: 400 }
+      );
+    }
+
     let companyId = user.companyId;
-
-    //SUPER_ADMIN support
+    
     if (user.role === "SUPER_ADMIN") {
-      const company = await prisma.company.findFirst();
-
-      if (!company) {
-        return NextResponse.json({
-          success: false,
-          message: "Superadmin cannot Add Products.",
-        });
-      }
-
-      companyId = company.id;
+      return NextResponse.json(
+        { success: false, message: "Super Admin cannot create product" },
+        { status: 403 }
+      );
     }
 
     const product = await prisma.product.create({
       data: {
-        ...body,
+        name: body.name,
+        sku: body.sku,
+        costPrice: body.costPrice,
+        sellingPrice: body.sellingPrice,
+        unit: body.unit,
+        minStock: body.minStock ?? 0,
+        openingStock: body.openingStock ?? 0,
+        categoryId: body.categoryId || null,
+        brandId: body.brandId || null,
+        expiryDate: body.expiryDate || null,
         companyId: companyId!,
         createdBy: user.role,
       },
@@ -73,14 +80,14 @@ export const POST = async (req: Request) => {
       success: true,
       product,
     });
-  } catch (e) {
-    console.log(e, "POST PRODUCT ERROR");
+  } catch (e: any) {
+    console.error("POST PRODUCT ERROR:", e);
     return NextResponse.json(
       {
         success: false,
-        message: "Error creating product",
+        message: e.message || "Error creating product",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 };
