@@ -1,45 +1,64 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { verifyAuth } from "@/lib/auth";
+import { stockSchema } from "@/lib/clientSchema/stock/schema";
+import { User } from "@/app/generated/prisma/client";
+import { stockService } from "@/lib/services/stock.service";
 
 export const GET = async () => {
-	const user = await verifyAuth();
+  const user = await verifyAuth();
 
-	const stocks = await prisma.stockLog.findMany({
-		include: {
-			product: true,
-			user: true,
-		},
-		orderBy: {
-			createdAt: "desc",
-		},
-	});
+  const stocks = await prisma.stockLog.findMany({
+    include: {
+      product: true,
+      user: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
-	const formatted = stocks.map((s) => ({
-		...s,
-		productName: s.product?.name,
-		userName: s.user?.name,
-	}));
+  const formatted = stocks.map((s) => ({
+    ...s,
+    productName: s.product?.name,
+    userName: s.user?.name,
+  }));
 
-	return NextResponse.json({
-		success: true,
-		stocks: formatted,
-	});
+  return NextResponse.json({
+    success: true,
+    stocks: formatted,
+  });
 };
 
 export const POST = async (req: Request) => {
-	const body = await req.json();
-	const user = await verifyAuth();
+  const body = await req.json();
 
-	const stock = await prisma.stockLog.create({
-		data: {
-			...body,
-			userId: user.id,
-		},
-	});
+  const user: User = await verifyAuth();
 
-	return NextResponse.json({
-		success: true,
-		stock,
-	});
+  const stockData = stockSchema.parse(body);
+
+  await prisma.$transaction(async (tx) => {
+    if (stockData.action === "STOCK_IN") {
+      await stockService.stockIn(tx, {
+        productId: stockData.productId,
+        reason: stockData.reason,
+        quantity: stockData.quantity,
+        userId: user.id,
+      });
+    }
+
+    if (stockData.action === "STOCK_OUT") {
+      await stockService.stockOut(tx, {
+        productId: stockData.productId,
+        reason: stockData.reason,
+        quantity: stockData.quantity,
+        userId: user.id,
+      });
+    }
+  });
+
+  return NextResponse.json({
+    success: true,
+    stock: [],
+  });
 };
