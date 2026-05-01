@@ -40,7 +40,7 @@ export async function PATCH(request, { params }) {
         phone: body.phone,
         pan: body.pan,
         users: {
-          update: {
+          updateMany: {
             where: {
               role: "COMPANY_ADMIN",
             },
@@ -48,6 +48,7 @@ export async function PATCH(request, { params }) {
               email: body.email,
               ...(body.password && {
                 password: await bcrypt.hash(body.password, 10),
+                name: body.name,
               }),
             },
           },
@@ -58,7 +59,9 @@ export async function PATCH(request, { params }) {
     return NextResponse.json({
       message: "Updated Successfully",
       success: true,
+      data: updatedCompany,
     });
+
   } catch (error) {
     console.log(error);
     return NextResponse.json(

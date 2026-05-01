@@ -4,115 +4,150 @@ import bcrypt from "bcryptjs";
 import { companyWithAdminFormSchema } from "@/lib/clientSchema/company/schema";
 import { verifyAuth } from "@/lib/auth";
 import { User } from "@/app/generated/prisma/client";
+import crypto from "crypto";
+import { sendVerificationEmail } from "@/lib/mailer";
 
 export async function POST(request: NextRequest) {
-  try {
-    const user = await verifyAuth();
-    if (user.role !== "SUPER_ADMIN") {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Only Super admin are allowed to create companies",
-        },
-        { status: 500 },
-      );
-    }
+	try {
+		const user = await verifyAuth();
 
-    const json = await request.json();
+		if (user.role !== "SUPER_ADMIN") {
+			return NextResponse.json(
+				{
+					success: false,
+					message: "Only Super admin can create companies",
+				},
+				{ status: 403 },
+			);
+		}
 
-    const body = companyWithAdminFormSchema.parse(json);
+		const json = await request.json();
+		const body = companyWithAdminFormSchema.parse(json);
 
-    const passwordHash = await bcrypt.hash(body.adminPassword, 10);
+		const token = crypto.randomBytes(32).toString("hex");
+		await prisma.emailVerificationToken.create({
+			data: {
+				email: body.adminEmail,
+				token,
+				expiresAt: new Date(Date.now() + 1000 * 60 * 60),
+			},
+		});
+		await sendVerificationEmail(body.adminEmail, token);
 
-    const newCompany = await prisma.company.create({
-      data: {
-        name: body.name,
-        address: body.address,
-        phone: body.phone,
-        pan: body.pan,
-        logoUrl: body.logoUrl,
-        isActive: true,
-        currency: body.currency,
-        rounding: body.rounding,
-        users: {
-          create: {
-            name: body.adminName,
-            password: passwordHash,
-            email: body.adminEmail,
-            role: "COMPANY_ADMIN",
-            isActive: true,
-          },
-        },
-      },
-    });
+		const existingUser = await prisma.user.findUnique({
+			where: { email: body.adminEmail },
+		});
 
-    return NextResponse.json({
-      message: "Company created successfully",
-      data: newCompany,
-    });
-  } catch (error) {
-    console.log(error);
-    return new NextResponse(
-      JSON.stringify({ message: "Error processing package", error: error }),
-      { status: 500 },
-    );
-  }
+		if (existingUser) {
+			return NextResponse.json(
+				{ message: "Email already exists" },
+				{ status: 400 },
+			);
+		}
+
+		const passwordHash = await bcrypt.hash(body.adminPassword, 10);
+
+		const newCompany = await prisma.company.create({
+			data: {
+				name: body.name,
+				address: body.address,
+				phone: body.phone,
+				pan: body.pan,
+				logoUrl: body.logoUrl,
+
+				isActive: false,
+				currency: body.currency,
+				rounding: body.rounding,
+
+				users: {
+					create: {
+						name: body.adminName,
+						email: body.adminEmail,
+						password: passwordHash,
+						role: "COMPANY_ADMIN",
+
+						isActive: false,
+					},
+				},
+			},
+		});
+
+		return NextResponse.json(
+			{
+				message: "Company created successfully",
+				data: newCompany,
+			},
+			{ status: 201 },
+		);
+	} catch (error: any) {
+		console.error("Create Company Error:", error);
+
+		if (error?.errors) {
+			return NextResponse.json(
+				{ message: error.errors[0].message },
+				{ status: 400 },
+			);
+		}
+
+		return NextResponse.json(
+			{ message: "Error creating company" },
+			{ status: 500 },
+		);
+	}
 }
 
 export async function GET() {
-  try {
-    const user: User = await verifyAuth();
+	try {
+		const user: User = await verifyAuth();
 
-    if (user.role !== "SUPER_ADMIN") {
-      return NextResponse.json(
-        {
-          message: "Only Super Admin can view Companies",
-          success: false,
-          companies: [],
-        },
-        { status: 500 },
-      );
-    }
-    const companies = await prisma.company.findMany({
-      select: {
-        id: true,
-        name: true,
-        address: true,
-        phone: true,
-        pan: true,
-        logoUrl: true,
-        isActive: true,
-        currency: true,
-        rounding: true,
-        users: {
-          select: {
-            name: true,
-            email: true,
-          },
-        },
-      },
-    });
+		if (user.role !== "SUPER_ADMIN") {
+			return NextResponse.json(
+				{
+					message: "Only Super Admin can view companies",
+					companies: [],
+				},
+				{ status: 403 },
+			);
+		}
 
-    const formatted = companies.map((c) => ({
-      ...c,
-      adminName: c.users?.[0]?.name || "-",
-      adminEmail: c.users?.[0]?.email || "-",
-      adminPassword: "",
-    }));
+		const companies = await prisma.company.findMany({
+			select: {
+				id: true,
+				name: true,
+				address: true,
+				phone: true,
+				pan: true,
+				logoUrl: true,
+				isActive: true,
+				currency: true,
+				rounding: true,
 
-    // const companies = companiesRaw.map((c) => ({
-    //   ...c,
-    //   currentSubscription: c.subscriptions[0] ?? null,
-    //   subscriptions: undefined,
-    // }));
-    return NextResponse.json({
-      message: "Company fetched",
-      companies: formatted,
-    });
-  } catch (error) {
-    return new NextResponse(
-      JSON.stringify({ message: "Error fetching packages", error: error }),
-      { status: 500 },
-    );
-  }
+				users: {
+					select: {
+						name: true,
+						email: true,
+					},
+				},
+			},
+		});
+
+		const formatted = companies.map((c) => ({
+			...c,
+			adminName: c.users?.[0]?.name || "-",
+			adminEmail: c.users?.[0]?.email || "-",
+			adminPassword: "",
+		}));
+
+		return NextResponse.json({
+			message: "Companies fetched successfully",
+			companies: formatted,
+		});
+	} catch (error) {
+		console.error("Fetch Company Error:", error);
+
+		return NextResponse.json(
+			{ message: "Error fetching companies" },
+			{ status: 500 },
+		);
+	}
 }
