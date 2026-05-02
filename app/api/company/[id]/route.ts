@@ -49,6 +49,12 @@ export async function PATCH(request, { params }) {
               ...(body.password && {
                 password: await bcrypt.hash(body.password, 10),
                 name: body.name,
+                address: body.address,
+                phone: body.phone,
+                pan: body.pan,
+                logoUrl: body.logoUrl,
+                currency: body.currency,
+                rounding: body.rounding,
               }),
             },
           },

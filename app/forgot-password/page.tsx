@@ -4,9 +4,10 @@ import { useState } from "react";
 
 export default function ForgotPasswordPage() {
 	const [email, setEmail] = useState("");
-	const [message, setMessage] = useState("");
 
-	const handleSubmit = async () => {
+	const handleSubmit = async (e: any) => {
+		e.preventDefault();
+
 		const res = await fetch("/api/forgot-password", {
 			method: "POST",
 			headers: {
@@ -16,34 +17,37 @@ export default function ForgotPasswordPage() {
 		});
 
 		const data = await res.json();
-		setMessage(data.message);
+
+		alert(data.message);
 	};
 
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-gray-100">
-			<div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
+			<div className="bg-white p-8 rounded-xl shadow-lg w-96">
 				<h2 className="text-2xl font-semibold text-center mb-6">
 					Forgot Password
 				</h2>
 
-				<input
-					type="email"
-					placeholder="Enter your email"
-					className="w-full border rounded-lg p-3 mb-4"
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
-				/>
+				<form className="space-y-5" onSubmit={handleSubmit}>
+					<div className="flex flex-col space-y-2">
+						<label className="text-sm font-medium text-gray-700">Email</label>
+						<input
+							type="email"
+							placeholder="Enter your email"
+							required
+							className="border rounded-lg p-2"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+						/>
+					</div>
 
-				<button
-					onClick={handleSubmit}
-					className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
-				>
-					Send Reset Link
-				</button>
-
-				{message && (
-					<p className="text-center text-sm mt-4 text-gray-600">{message}</p>
-				)}
+					<button
+						type="submit"
+						className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition hover:cursor-pointer"
+					>
+						Send Reset Link
+					</button>
+				</form>
 			</div>
 		</div>
 	);
