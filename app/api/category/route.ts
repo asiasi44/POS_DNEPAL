@@ -8,9 +8,8 @@ import { User } from "@/app/generated/prisma/client";
 
 type Params = { params: Promise<{ id: string }> };
 
-export const POST = withErrorHandler<Params>(async function (
+export const POST = withErrorHandler(async function (
   request: NextRequest,
-  { params }: Params,
 ) {
   const body = await request.json();
 
@@ -36,9 +35,8 @@ export const POST = withErrorHandler<Params>(async function (
   });
 });
 
-export const GET = withErrorHandler<Params>(async function (
+export const GET = withErrorHandler(async function (
   request: NextRequest,
-  { params }: Params,
 ) {
   const user: User = await verifyAuth();
   const allCategories = await prisma.category.findMany({

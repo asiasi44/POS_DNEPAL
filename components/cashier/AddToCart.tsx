@@ -2,10 +2,19 @@
 
 import { ProductFormType } from "@/lib/clientSchema/product/schema";
 import { useCheckoutProducts } from "@/lib/hooks/useCheckout";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import InvoiceModal from "./InvoiceModal";
 
 type CartItem = {
   product: ProductFormType;
   quantity: number;
+};
+
+type InvoiceData = {
+  sale: any;
+  company: any;
+  user: any;
 };
 
 export default function CartPanel({
@@ -21,6 +30,8 @@ export default function CartPanel({
   discount: number;
   setDiscount: (v: number) => void;
 }) {
+  const [showInvoice, setShowInvoice] = useState(false);
+  const [invoiceData, setInvoiceData] = useState<InvoiceData | null>(null);
   const checkoutProductsMutation = useCheckoutProducts();
   const vatRate = 13;
 
@@ -35,17 +46,34 @@ export default function CartPanel({
   const finalTotal = afterDiscount + vatAmount;
 
   const checkoutProducts = () => {
-    checkoutProductsMutation.mutate({
-      cart,
-      subtotal,
-      discount,
-      vat: vatRate,
-      total: finalTotal,
-    });
+    checkoutProductsMutation.mutate(
+      {
+        cart,
+        subtotal,
+        discount,
+        vat: vatRate,
+        total: finalTotal,
+      },
+      {
+        onSuccess: (response) => {
+          toast.success("Successfully checked out");
+          if (response.data) {
+            setInvoiceData(response.data);
+            setShowInvoice(true);
+          }
+        },
+      },
+    );
   };
   return (
     <div className="w-1/3 bg-white p-4 rounded-lg shadow flex flex-col">
       <h2 className="text-2xl font-bold mb-4">Cart</h2>
+
+      <InvoiceModal
+        isOpen={showInvoice}
+        onClose={() => setShowInvoice(false)}
+        invoiceData={invoiceData}
+      />
 
       <div className="flex-1 overflow-auto space-y-2">
         {cart.length === 0 && (

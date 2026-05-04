@@ -1,5 +1,8 @@
 import ProductFormView from "@/components/products/ProductFormView";
-import { productFormSchema, ProductFormType } from "../clientSchema/product/schema";
+import {
+  productFormSchema,
+  ProductFormType,
+} from "../clientSchema/product/schema";
 import { CrudConfig } from "../clientSchema/crud/schema";
 import {
   useProductsTable,
@@ -21,9 +24,7 @@ export const productsConfig: CrudConfig<ProductFormType, ProductFormType> = {
   defaultValues: {
     name: "",
     sku: "",
-    sellingPrice: 0,
-    unit: "",
-    openingStock: 0,
+    unit: "PIECE",
   },
   FormView: ProductFormView,
   formId: "form-rhf-products",

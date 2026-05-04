@@ -6,10 +6,7 @@ import { User } from "@/app/generated/prisma/client";
 
 type Params = { params: Promise<{ id: string }> };
 
-export const POST = withErrorHandler<Params>(async function (
-  request: NextRequest,
-  { params }: Params,
-) {
+export const POST = withErrorHandler(async function (request: NextRequest) {
   const body = await request.json();
   const user: User = await verifyAuth();
 
@@ -44,10 +41,7 @@ export const POST = withErrorHandler<Params>(async function (
   });
 });
 
-export const GET = withErrorHandler<Params>(async function (
-  request: NextRequest,
-  { params }: Params,
-) {
+export const GET = withErrorHandler(async function (request: NextRequest) {
   const user: User = await verifyAuth();
 
   if (user.role !== "SUPER_ADMIN") {

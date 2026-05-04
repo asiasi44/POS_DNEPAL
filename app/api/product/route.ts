@@ -68,7 +68,7 @@ export const POST = async (req: Request) => {
           minStock: productData.minStock,
           categoryId: productData.categoryId || null,
           brandId: productData.brandId || null,
-          expiryDate: productData.expiryDate || null,
+          expiryDate: new Date(productData.expiryDate) || null,
           companyId: user.companyId,
           createdById: user.id,
         },
