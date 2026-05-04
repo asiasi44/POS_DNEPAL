@@ -1,4 +1,3 @@
-import { User } from "@/app/generated/prisma/client";
 import { verifyAuth } from "@/lib/auth";
 import { companyStaffSchema } from "@/lib/clientSchema/companystaff/schema";
 import prisma from "@/lib/prisma";
@@ -6,7 +5,7 @@ import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
-  const user: User = await verifyAuth();
+  const user = await verifyAuth();
 
   const staffs = await prisma.user.findMany({
     where: {
@@ -35,7 +34,7 @@ export async function POST(request: NextRequest) {
   const body = companyStaffSchema.parse(json);
 
   const passwordHash = await bcrypt.hash(body.password, 10);
-  const user: User = await verifyAuth();
+  const user = await verifyAuth();
 
   const newStaff = await prisma.user.create({
     data: {

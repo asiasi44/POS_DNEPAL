@@ -1,10 +1,9 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { verifyAuth } from "@/lib/auth";
-import { User } from "@/app/generated/prisma/client";
 
 export const GET = async () => {
-  const user: User = await verifyAuth();
+  const user = await verifyAuth();
 
   if (user.companyId === null) {
     const brandsForSuperadmin = await prisma.brand.findMany({

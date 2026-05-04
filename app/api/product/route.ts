@@ -1,7 +1,6 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { verifyAuth } from "@/lib/auth";
-import { User } from "@/app/generated/prisma/client";
 import { productFormSchema } from "@/lib/clientSchema/product/schema";
 import { stockService } from "@/lib/services/stock.service";
 
@@ -44,7 +43,7 @@ export const GET = async () => {
 
 export const POST = async (req: Request) => {
   try {
-    const user: User = await verifyAuth();
+    const user = await verifyAuth();
     const body = await req.json();
 
     const productData = productFormSchema.parse(body);

@@ -1,11 +1,10 @@
-import { Product, User } from "@/app/generated/prisma/client";
 import { verifyAuth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const user: User = await verifyAuth();
+  const user = await verifyAuth();
   if (!user.companyId) {
     return NextResponse.json({
       success: false,
@@ -24,7 +23,7 @@ export async function POST(request: NextRequest) {
 
       items: {
         create: body.cart.map(
-          (item: { product: Product; quantity: number }) => ({
+          (item: { product: any; quantity: number }) => ({
             productId: item.product.id,
             quantity: item.quantity,
             price: item.product.sellingPrice,

@@ -3,7 +3,6 @@ import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { companyWithAdminFormSchema } from "@/lib/clientSchema/company/schema";
 import { verifyAuth } from "@/lib/auth";
-import { User } from "@/app/generated/prisma/client";
 
 export async function POST(request: NextRequest) {
   try {
@@ -61,7 +60,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    const user: User = await verifyAuth();
+    const user = await verifyAuth();
 
     if (user.role !== "SUPER_ADMIN") {
       return NextResponse.json(
@@ -93,7 +92,7 @@ export async function GET() {
       },
     });
 
-    const formatted = companies.map((c) => ({
+    const formatted = companies.map((c: any) => ({
       ...c,
       adminName: c.users?.[0]?.name || "-",
       adminEmail: c.users?.[0]?.email || "-",

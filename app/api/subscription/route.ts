@@ -1,4 +1,3 @@
-import { User } from "@/app/generated/prisma/client";
 import { verifyAuth } from "@/lib/auth";
 import { subscriptionSchema } from "@/lib/clientSchema/subscription/schema";
 import prisma from "@/lib/prisma";
@@ -6,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const user: User = await verifyAuth();
+    const user = await verifyAuth();
 
     if (user.role !== "SUPER_ADMIN") {
       return NextResponse.json(
@@ -40,7 +39,7 @@ export async function GET() {
       },
     });
 
-    const returnedSubscription = subscriptions.map((eachSubscription) => {
+    const returnedSubscription = subscriptions.map((eachSubscription: any) => {
       const companyName = eachSubscription.company.name;
       const packageName = eachSubscription.package.name;
       const packageType = eachSubscription.package.interval;
@@ -73,7 +72,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const user: User = await verifyAuth();
+    const user = await verifyAuth();
     if (user.role !== "SUPER_ADMIN") {
       return NextResponse.json(
         {

@@ -2,13 +2,12 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { withErrorHandler } from "@/lib/errorHandler";
 import { verifyAuth } from "@/lib/auth";
-import { User } from "@/app/generated/prisma/client";
 
 type Params = { params: Promise<{ id: string }> };
 
 export const POST = withErrorHandler(async function (request: NextRequest) {
   const body = await request.json();
-  const user: User = await verifyAuth();
+  const user = await verifyAuth();
 
   if (user.role !== "SUPER_ADMIN") {
     return NextResponse.json(
@@ -42,7 +41,7 @@ export const POST = withErrorHandler(async function (request: NextRequest) {
 });
 
 export const GET = withErrorHandler(async function (request: NextRequest) {
-  const user: User = await verifyAuth();
+  const user = await verifyAuth();
 
   if (user.role !== "SUPER_ADMIN") {
     return NextResponse.json(
