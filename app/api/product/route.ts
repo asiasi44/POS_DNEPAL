@@ -62,7 +62,7 @@ export const POST = async (req: Request) => {
           costPrice: productData.costPrice,
           sellingPrice: productData.sellingPrice,
           unit: productData.unit,
-          image: "empty.com",
+          image: productData.image || "someurl.com",
           currentStock: productData.currentStock,
           minStock: productData.minStock,
           categoryId: productData.categoryId || null,

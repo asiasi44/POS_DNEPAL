@@ -52,6 +52,17 @@ const ProductFormView = ({
         )}
       />
 
+      <Controller
+        name="image"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field>
+            <FieldLabel>Image URL</FieldLabel>
+            <Input {...field} placeholder="Image Url" />
+            {fieldState.error && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
       {/* CATEGORY DROPDOWN */}
       <Controller
         name="categoryId"

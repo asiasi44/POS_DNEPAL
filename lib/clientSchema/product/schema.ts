@@ -9,7 +9,7 @@ export const productFormSchema = z.object({
   unit: z.enum(["KG", "LITER", "METER", "PIECE"]),
   currentStock: z.number(),
   minStock: z.number(),
-
+  image: z.string(),
   categoryId: z.string(),
   brandId: z.string(),
   
