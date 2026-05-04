@@ -20,7 +20,7 @@ export const GET = async () => {
       },
     });
 
-    const formatted = products.map((p) => ({
+    const formatted = products.map((p: any) => ({
       ...p,
       brandName: p.brand?.name,
       categoryName: p.category?.name,
@@ -49,7 +49,7 @@ export const POST = async (req: Request) => {
 
     const productData = productFormSchema.parse(body);
 
-    const product = await prisma.$transaction(async (tx) => {
+    const product = await prisma.$transaction(async (tx: any) => {
       if (user.companyId === null) {
         return NextResponse.json(
           { success: false, message: "Super Admin cannot create product" },
