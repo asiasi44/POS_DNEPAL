@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { withErrorHandler } from "@/lib/errorHandler";
 import { verifyAuth } from "@/lib/auth";
 import slugify from "slugify";
-import { UserRole } from "@/app/generated/prisma/enums";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -17,7 +16,7 @@ export const POST = withErrorHandler(async function (
   });
   const user = await verifyAuth();
 
-  const createdUser: UserRole = user.role;
+  const createdUser = user.role;
 
   const createdCategory = await prisma.category.create({
     data: {

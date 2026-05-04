@@ -1,8 +1,6 @@
-import { TransactionClient } from "@/app/generated/prisma/internal/prismaNamespace";
-
 export const stockService = {
   async stockIn(
-    tx: TransactionClient,
+    tx: any,
     {
       productId,
       userId,
